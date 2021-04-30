@@ -2,6 +2,8 @@ package me.dgahn.racingcar.domain;
 
 public class Car {
 
+	public static final int MOVE_MIN = 4;
+
 	private final Position position;
 	private final Name name;
 
@@ -16,6 +18,12 @@ public class Car {
 
 	public Name getName() {
 		return name;
+	}
+
+	public void move(final int number) {
+		if(number >= MOVE_MIN) {
+			position.plusOne();
+		}
 	}
 
 }
