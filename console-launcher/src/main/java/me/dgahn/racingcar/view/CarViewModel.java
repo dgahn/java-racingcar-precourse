@@ -41,8 +41,8 @@ public class CarViewModel {
 
 	public void play() {
 		scoreBoard.giveScore();
-		if(isCompleted()) {
-			output = scoreBoard.toString();
+		if (isCompleted()) {
+			output = scoreBoard.getResult() + System.lineSeparator() + scoreBoard.getWinner() + "가 우승했습니다.";
 		}
 	}
 

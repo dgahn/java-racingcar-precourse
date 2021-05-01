@@ -15,7 +15,7 @@ class ScoreBoardTest {
 	@Test
 	void ScoreBoard에_자동차를_각각_붙일_수_있다() {
 		final var scoreBoard = createScoreBoard();
-		final Map<Car, List<Integer>> scores = scoreBoard.getScores();
+		final Map<Car, List<Integer>> scores = scoreBoard.getCarScoreMap();
 		scores.forEach((car, scoreList) -> assertThat(scoreList).isEmpty());
 	}
 
@@ -28,7 +28,7 @@ class ScoreBoardTest {
 			scoreBoard.giveScore();
 		}
 
-		final Map<Car, List<Integer>> scores = scoreBoard.getScores();
+		final Map<Car, List<Integer>> scores = scoreBoard.getCarScoreMap();
 		scores.forEach((car, scoreList) -> {
 			assertThat(scoreList).isNotEmpty();
 			assertThat(scoreList.size()).isEqualTo(times);
@@ -43,10 +43,23 @@ class ScoreBoardTest {
 		for (int i = 0; i < 2; i++) {
 			scoreBoard.giveScore();
 		}
-		assertThat(scoreBoard.toString()).contains("실행결과\n");
-		assertThat(scoreBoard.toString()).contains("단군 : 10\n");
-		assertThat(scoreBoard.toString()).contains("혁거세 : 10\n");
-		assertThat(scoreBoard.toString()).contains("온조왕 : 10\n");
+		assertThat(scoreBoard.getResult()).contains("실행결과\n");
+		assertThat(scoreBoard.getResult()).contains("단군 : 10\n");
+		assertThat(scoreBoard.getResult()).contains("혁거세 : 10\n");
+		assertThat(scoreBoard.getResult()).contains("온조왕 : 10\n");
+	}
+
+	@Test
+	void 현재_라운드까지_점수가_제일_높은_사람을_가져올_수_있다() {
+		final var names = Lists.newArrayList("단군", "온조왕", "혁거세");
+		final var scoreBoard = createScoreBoard();
+		final int times = 5;
+
+		for (int i = 0; i < times; i++) {
+			scoreBoard.giveScore();
+		}
+
+		assertThat(scoreBoard.getWinner().split(",")).isSubsetOf(names);
 	}
 
 	private ScoreBoard createScoreBoard() {

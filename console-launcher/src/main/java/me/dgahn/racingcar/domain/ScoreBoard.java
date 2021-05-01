@@ -12,7 +12,7 @@ public class ScoreBoard {
 	private static final String COLON = " : ";
 
 	private final RandomNumberGenerator generator;
-	private final Map<Car, List<Integer>> scores = new HashMap<>();
+	private final Map<Car, List<Integer>> carScoreMap = new HashMap<>();
 	private final Round currentRound = new Round(INIT_VALUE);
 
 	public ScoreBoard(final RandomNumberGenerator generator) {
@@ -20,15 +20,15 @@ public class ScoreBoard {
 	}
 
 	public void addCar(final Car car) {
-		scores.putIfAbsent(car, new ArrayList<>());
+		carScoreMap.putIfAbsent(car, new ArrayList<>());
 	}
 
-	public Map<Car, List<Integer>> getScores() {
-		return scores;
+	public Map<Car, List<Integer>> getCarScoreMap() {
+		return carScoreMap;
 	}
 
 	public void giveScore() {
-		scores.forEach((car, scoreList) -> scoreList.add(generator.generateUnderTen()));
+		carScoreMap.forEach((car, scoreList) -> scoreList.add(generator.generateUnderTen()));
 		currentRound.increase();
 	}
 
@@ -36,8 +36,7 @@ public class ScoreBoard {
 		return currentRound;
 	}
 
-	@Override
-	public String toString() {
+	public String getResult() {
 		final String newLine = System.lineSeparator();
 		final var builder = new StringBuilder(RESULT_START_MESSAGE);
 		for (var round = INIT_VALUE; round < currentRound.getValue(); round++) {
@@ -48,9 +47,35 @@ public class ScoreBoard {
 
 	private void append(final StringBuilder builder, final String newLine, final int round) {
 		builder.append(newLine);
-		scores.forEach((car, integers) -> builder.append(car.getName().getValue())
+		carScoreMap.forEach((car, integers) -> builder.append(car.getName().getValue())
 			.append(COLON)
 			.append(integers.get(round))
 			.append(newLine));
 	}
+
+	public String getWinner() {
+		final var winners = new ArrayList<String>();
+		var currentMaxPosition = INIT_VALUE;
+		for (var carScoreEntry : carScoreMap.entrySet()) {
+			final var car = carScoreEntry.getKey();
+			final var scores = carScoreEntry.getValue();
+			car.move(scores);
+			currentMaxPosition = measureMaxPosition(car, currentMaxPosition, winners);
+		}
+		return String.join(",", winners);
+	}
+
+	public int measureMaxPosition(final Car car, int currentMaxPosition, final List<String> winnerBuilder) {
+		int carPositionValue = car.getPosition().getValue();
+		if (currentMaxPosition == carPositionValue) {
+			winnerBuilder.add(car.getName().getValue());
+		}
+		if (currentMaxPosition < carPositionValue) {
+			winnerBuilder.clear();
+			winnerBuilder.add(car.getName().getValue());
+			currentMaxPosition = carPositionValue;
+		}
+		return currentMaxPosition;
+	}
+
 }

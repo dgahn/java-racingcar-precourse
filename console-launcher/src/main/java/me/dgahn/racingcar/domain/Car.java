@@ -1,5 +1,7 @@
 package me.dgahn.racingcar.domain;
 
+import java.util.List;
+
 public class Car {
 
 	public static final int MOVE_MIN = 4;
@@ -20,10 +22,14 @@ public class Car {
 		return name;
 	}
 
-	public void move(final int number) {
-		if(number >= MOVE_MIN) {
+	public void move(final int score) {
+		if(score >= MOVE_MIN) {
 			position.plusOne();
 		}
+	}
+
+	public void move(final List<Integer> scores) {
+		scores.forEach(this::move);
 	}
 
 }
