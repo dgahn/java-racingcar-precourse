@@ -1,9 +1,8 @@
 package me.dgahn.racingcar.view;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -12,13 +11,6 @@ import me.dgahn.racingcar.domain.RandomNumberGenerator;
 import me.dgahn.racingcar.domain.ScoreBoard;
 
 class CarViewModelTest {
-
-	@Test
-	void 게임이_완료되면_isCompleted는_true다() {
-		final var viewModel = getViewModel("1", "단군,동명왕,온조왕,혁거세");
-		viewModel.play();
-		assertThat(viewModel.isCompleted()).isTrue();
-	}
 
 	@Test
 	void 자동차_이름을_입력_받기_전에는_output이_자동차_입력을_위한_Message다() {
@@ -35,6 +27,34 @@ class CarViewModelTest {
 		assertThat(viewModel.getOutput()).isEqualTo("시도할 회수는 몇회인가요?");
 	}
 
+	@Test
+	void 게임을_몇_라운드_진행할_수_있는지_설정_할_수_있다() {
+		final var viewModel = getViewModel();
+		final String round = "10";
+		viewModel.setTotalRound(round);
+		assertThat(viewModel.getRound().getValue()).isEqualTo(Integer.parseInt(round));
+	}
+
+	@Test
+	void 게임을_실행하면_각_라운드마다_자동차_갯수만큼_점수가_부여된다() {
+		final RandomNumberGenerator generator = mock(RandomNumberGenerator.class);
+		when(generator.generateUnderTen()).thenReturn(10);
+		final var viewModel = getViewModel(10, "단군,온조왕,혁거세", generator);
+
+		viewModel.play();
+
+		verify(generator, times(3)).generateUnderTen();
+	}
+
+	@Test
+	void 게임의_총_라운드만큼_수행하면_output은_결과가_된다() {
+		final RandomNumberGenerator generator = mock(RandomNumberGenerator.class);
+		when(generator.generateUnderTen()).thenReturn(10);
+		final var viewModel = getViewModel(1, "단군,온조왕", generator);
+		viewModel.play();
+		assertThat(viewModel.getOutput()).startsWith("실행결과");
+	}
+
 	private CarViewModel getViewModel() {
 		final var random = new Random();
 		final var generator = new RandomNumberGenerator(random);
@@ -42,10 +62,19 @@ class CarViewModelTest {
 		return new CarViewModel(scoreBoard);
 	}
 
-	private CarViewModel getViewModel(final String count, final String csvCarNames) {
-		final var viewModel = getViewModel();
+	private CarViewModel getViewModel(final RandomNumberGenerator generator) {
+		final var scoreBoard = new ScoreBoard(generator);
+		return new CarViewModel(scoreBoard);
+	}
+
+	private CarViewModel getViewModel(
+		final int count,
+		final String csvCarNames,
+		final RandomNumberGenerator generator
+	) {
+		final var viewModel = getViewModel(generator);
 		viewModel.setCars(csvCarNames);
-		viewModel.setCount(count);
+		viewModel.setTotalRound(count);
 		return viewModel;
 	}
 

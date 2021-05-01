@@ -19,20 +19,23 @@ public class Launcher {
 		final var view = new CarConsoleView(scanner);
 
 		setGame(view, viewModel);
-		play(view, viewModel);
+		playGame(view, viewModel);
 	}
 
-	private static void play(final CarConsoleView view, final CarViewModel viewModel) {
-		viewModel.play();
+	private static void playGame(final CarConsoleView view, final CarViewModel viewModel) {
+		while(!viewModel.isCompleted()) {
+			viewModel.play();
+		}
+		view.info(viewModel.getOutput());
 	}
 
 	private static void setGame(final CarConsoleView view, final CarViewModel viewModel) {
 		try {
 			final String csvCarNames = view.input(viewModel.getOutput());
 			viewModel.setCars(csvCarNames);
-			final String count = view.input(viewModel.getOutput());
-			viewModel.setCount(count);
-		} catch(IllegalArgumentException e) {
+			final String round = view.input(viewModel.getOutput());
+			viewModel.setTotalRound(round);
+		} catch (IllegalArgumentException e) {
 			view.error(e.getMessage());
 		}
 	}

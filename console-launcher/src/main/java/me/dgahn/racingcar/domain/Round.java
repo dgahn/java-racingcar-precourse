@@ -1,12 +1,16 @@
 package me.dgahn.racingcar.domain;
 
-public class Count {
+public class Round {
 
-	private final int value;
+	private int value;
 
-	public Count(final String value) {
+	public Round(final String value) {
 		validCount(value);
 		this.value = Integer.parseInt(value);
+	}
+
+	public Round(final int value) {
+		this.value = value;
 	}
 
 	private void validCount(final String value) {
@@ -17,6 +21,10 @@ public class Count {
 
 	public int getValue() {
 		return value;
+	}
+
+	public void increase() {
+		value++;
 	}
 
 }
