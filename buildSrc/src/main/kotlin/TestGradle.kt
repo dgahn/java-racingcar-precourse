@@ -30,7 +30,7 @@ object JacocoOption {
 
     val limitMinimum = (1.0).toBigDecimal()
     val excludeList = listOf(
-            "me/dgahn/baseball/Launcher.java",
-            "me/dgahn/baseball/view/BaseBallConsoleView.java"
+            "me/dgahn/racingcar/view/CarConsoleView.java",
+            "me/dgahn/racingcar/Launcher.java"
     )
 }
