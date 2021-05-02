@@ -51,16 +51,20 @@ public class CarViewModel {
 
 	public void setCars(final String csvCarNames) {
 		try {
-			final String[] carNames = StringUtils.deleteWhitespace(csvCarNames).split(",");
-			validCarNames(carNames);
-			for (final String name : carNames) {
-				scoreBoard.addCar(new Car(name));
-			}
+			addCars(csvCarNames);
 			output = ROUND_INPUT_MESSAGE;
 		} catch (IllegalArgumentException e) {
 			scoreBoard.clearCarScoreMap();
 			output = CAR_INPUT_MESSAGE;
 			throw e;
+		}
+	}
+
+	private void addCars(final String csvCarNames) {
+		final String[] carNames = StringUtils.deleteWhitespace(csvCarNames).split(",");
+		validCarNames(carNames);
+		for (final String name : carNames) {
+			scoreBoard.addCar(new Car(name));
 		}
 	}
 

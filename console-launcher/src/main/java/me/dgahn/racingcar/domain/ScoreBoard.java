@@ -65,14 +65,14 @@ public class ScoreBoard {
 		return String.join(",", winners);
 	}
 
-	public int measureMaxPosition(final Car car, int currentMaxPosition, final List<String> winnerBuilder) {
+	public int measureMaxPosition(final Car car, int currentMaxPosition, final List<String> winners) {
 		int carPositionValue = car.getPosition().getValue();
 		if (currentMaxPosition == carPositionValue) {
-			winnerBuilder.add(car.getName().getValue());
+			winners.add(car.getName().getValue());
 		}
 		if (currentMaxPosition < carPositionValue) {
-			winnerBuilder.clear();
-			winnerBuilder.add(car.getName().getValue());
+			winners.clear();
+			winners.add(car.getName().getValue());
 			currentMaxPosition = carPositionValue;
 		}
 		return currentMaxPosition;
