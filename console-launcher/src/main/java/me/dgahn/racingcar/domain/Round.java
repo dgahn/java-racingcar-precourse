@@ -15,7 +15,7 @@ public class Round {
 
 	private void validCount(final String value) {
 		if(!value.chars().allMatch(Character::isDigit)) {
-			throw new IllegalArgumentException("양수를 입력해주세요. : " + value);
+			throw new IllegalArgumentException("총 횟수는 1이상 입력해야 합니다.");
 		}
 	}
 

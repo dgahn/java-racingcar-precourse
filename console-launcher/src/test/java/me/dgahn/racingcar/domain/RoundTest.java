@@ -10,14 +10,14 @@ class RoundTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"abc", "!@#!@#", "-1", "10.7"})
-	void Count를_생성할_때_양수가_아니면_IllegalException이_발생한다(final String value) {
+	void Round_를_생성할_때_양수가_아니면_IllegalException이_발생한다(final String value) {
 		assertThatThrownBy(() -> new Round(value))
 			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("양수를 입력해주세요. : " + value);
+			.hasMessage("총 횟수는 1이상 입력해야 합니다.");
 	}
 
 	@Test
-	void Count_를_양수로_생성_할_수_있다() {
+	void Round_를_양수로_생성_할_수_있다() {
 		final var value = "10";
 		final var count = new Round(value);
 		assertThat(count.getValue()).isEqualTo(10);

@@ -78,4 +78,7 @@ public class ScoreBoard {
 		return currentMaxPosition;
 	}
 
+	public void clearCarScoreMap() {
+		carScoreMap.clear();
+	}
 }

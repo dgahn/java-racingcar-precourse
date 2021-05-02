@@ -34,9 +34,10 @@ public class Launcher {
 			final String csvCarNames = view.input(viewModel.getOutput());
 			viewModel.setCars(csvCarNames);
 			final String round = view.input(viewModel.getOutput());
-			viewModel.setTotalRound(round);
+			viewModel.setTotalRound(round.trim());
 		} catch (IllegalArgumentException e) {
 			view.error(e.getMessage());
+			setGame(view, viewModel);
 		}
 	}
 
