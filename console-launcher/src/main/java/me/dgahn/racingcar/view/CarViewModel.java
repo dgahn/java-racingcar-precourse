@@ -10,8 +10,15 @@ import me.dgahn.racingcar.util.StringUtils;
 
 public class CarViewModel {
 
+	private static final String ROUND_INPUT_MESSAGE = "시도할 회수는 몇회인가요?";
+	public static final String ROUND_INPUT_ERROR_MESSAGE = "총 횟수는 1이상 입력해야 합니다.";
+	private static final String CAR_INPUT_MESSAGE = "경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)";
+	private static final String CAR_DUPLICATION_ERROR_MESSAGE = "자동차의 이름이 중복되면 안됩니다.";
+	private static final String CAR_NUMBERS_ERROR_MESSAGE = "자동차의 이름을 2대 이상 입력해야 합니다.";
+	private static final String RESULT_END_MESSAGE = "가 우승했습니다.";
+
 	private final ScoreBoard scoreBoard;
-	private String output = "경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)";
+	private String output = CAR_INPUT_MESSAGE;
 	private Round totalRound;
 
 	public CarViewModel(final ScoreBoard scoreBoard) {
@@ -27,7 +34,7 @@ public class CarViewModel {
 			this.totalRound = new Round(totalRound);
 			validTotalRound();
 		} catch (IllegalArgumentException e) {
-			output = "경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)";
+			output = CAR_INPUT_MESSAGE;
 			throw e;
 		}
 	}
@@ -38,7 +45,7 @@ public class CarViewModel {
 
 	private void validTotalRound() {
 		if (totalRound.getValue() <= 0) {
-			throw new IllegalArgumentException("총 횟수는 1이상 입력해야 합니다.");
+			throw new IllegalArgumentException(ROUND_INPUT_ERROR_MESSAGE);
 		}
 	}
 
@@ -49,20 +56,20 @@ public class CarViewModel {
 			for (final String name : carNames) {
 				scoreBoard.addCar(new Car(name));
 			}
-			output = "시도할 회수는 몇회인가요?";
+			output = ROUND_INPUT_MESSAGE;
 		} catch (IllegalArgumentException e) {
 			scoreBoard.clearCarScoreMap();
-			output = "경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)";
+			output = CAR_INPUT_MESSAGE;
 			throw e;
 		}
 	}
 
 	private void validCarNames(final String[] carNames) {
 		if (carNames.length <= 1) {
-			throw new IllegalArgumentException("자동차의 이름을 2대 이상 입력해야 합니다.");
+			throw new IllegalArgumentException(CAR_NUMBERS_ERROR_MESSAGE);
 		}
 		if (checkDuplication(carNames)) {
-			throw new IllegalArgumentException("자동차의 이름이 중복되면 안됩니다.");
+			throw new IllegalArgumentException(CAR_DUPLICATION_ERROR_MESSAGE);
 		}
 	}
 
@@ -78,7 +85,7 @@ public class CarViewModel {
 	public void play() {
 		scoreBoard.giveScore();
 		if (isCompleted()) {
-			output = scoreBoard.getResult() + System.lineSeparator() + scoreBoard.getWinner() + "가 우승했습니다.";
+			output = scoreBoard.getResult() + System.lineSeparator() + scoreBoard.getWinner() + RESULT_END_MESSAGE;
 		}
 	}
 

@@ -1,5 +1,7 @@
 package me.dgahn.racingcar.domain;
 
+import static me.dgahn.racingcar.view.CarViewModel.*;
+
 public class Round {
 
 	private int value;
@@ -15,7 +17,7 @@ public class Round {
 
 	private void validCount(final String value) {
 		if(!value.chars().allMatch(Character::isDigit)) {
-			throw new IllegalArgumentException("총 횟수는 1이상 입력해야 합니다.");
+			throw new IllegalArgumentException(ROUND_INPUT_ERROR_MESSAGE);
 		}
 	}
 
